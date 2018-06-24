@@ -18,7 +18,8 @@ func (this *store) Master() *gorm.DB {
 	if err != nil {
 		log.Fatal(err)
 	}
-	db.DB().SetMaxOpenConns(2)
+	db.DB().SetMaxOpenConns(50)
+	db.DB().SetMaxIdleConns(20)
 	this.db = db
 
 	return db
@@ -34,8 +35,7 @@ func Init() {
 
 func initDataBase() {
 	Store := store{}
-	db := Store.Master().DB()
-	err := db.Ping()
+	err := Store.Master().DB().Ping()
 
 	if err != nil {
 		panic(err)
